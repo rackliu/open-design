@@ -4,8 +4,52 @@ import type {
   SkillSummary,
 } from '../types';
 import type { Locale } from './types';
+import {
+  FR_DESIGN_SYSTEM_CATEGORIES,
+  FR_DESIGN_SYSTEM_IDS_WITH_EN_FALLBACK,
+  FR_DESIGN_SYSTEM_SUMMARIES,
+  FR_PROMPT_TEMPLATE_CATEGORIES,
+  FR_PROMPT_TEMPLATE_COPY,
+  FR_PROMPT_TEMPLATE_IDS_WITH_EN_FALLBACK,
+  FR_PROMPT_TEMPLATE_TAGS,
+  FR_SKILL_COPY,
+  FR_SKILL_IDS_WITH_EN_FALLBACK,
+} from './content.fr';
+import {
+  RU_DESIGN_SYSTEM_CATEGORIES,
+  RU_DESIGN_SYSTEM_IDS_WITH_EN_FALLBACK,
+  RU_DESIGN_SYSTEM_SUMMARIES,
+  RU_PROMPT_TEMPLATE_CATEGORIES,
+  RU_PROMPT_TEMPLATE_COPY,
+  RU_PROMPT_TEMPLATE_IDS_WITH_EN_FALLBACK,
+  RU_PROMPT_TEMPLATE_TAGS,
+  RU_SKILL_COPY,
+  RU_SKILL_IDS_WITH_EN_FALLBACK,
+} from './content.ru';
 
-const DE_SKILL_COPY: Record<string, { description?: string; examplePrompt?: string }> = {
+type LocalizedSkillCopy = { description?: string; examplePrompt?: string };
+type LocalizedPromptTemplateCopy = Partial<Pick<PromptTemplateSummary, 'summary' | 'title'>>;
+type LocalizedContentIds = {
+  skills: string[];
+  designSystems: string[];
+  designSystemCategories: string[];
+  promptTemplates: string[];
+  promptTemplateCategories: string[];
+  promptTemplateTags: string[];
+};
+type LocalizedContentBundle = {
+  skillCopy: Record<string, LocalizedSkillCopy>;
+  skillIdsWithEnFallback: readonly string[];
+  designSystemSummaries: Record<string, string>;
+  designSystemCategories: Record<string, string>;
+  designSystemIdsWithEnFallback: readonly string[];
+  promptTemplateCategories: Record<string, string>;
+  promptTemplateIdsWithEnFallback: readonly string[];
+  promptTemplateTags: Record<string, string>;
+  promptTemplateCopy: Record<string, LocalizedPromptTemplateCopy>;
+};
+
+const DE_SKILL_COPY: Record<string, LocalizedSkillCopy> = {
   'audio-jingle': {
     examplePrompt:
       'Ein fröhlicher 30-Sekunden-Indie-Pop-Jingle für den Launch eines Coffee Shops — warmes E-Piano, Besen-Drums, sanfter Bass und ein einzelner sonniger „ahhh“-Chor im Refrain. Ohne Gesang. Loop-freundliches Ende.',
@@ -28,6 +72,7 @@ const DE_SKILL_COPY: Record<string, { description?: string; examplePrompt?: stri
     examplePrompt:
       'Entwerfen Sie ‚mutuals‘ — eine Dating-Site für X-Poster. Tägliches Digest-Dashboard mit Statistiken, Balkendiagramm für gegenseitige Matches und Community-Ticker.',
   },
+  'design-brief': {},
   'digital-eguide': {
     examplePrompt:
       'Entwerfen Sie ‚The Creator\'s Style & Format Guide‘ — Coverseite und eine Innenseite für eine Lifestyle-Creator-Brand.',
@@ -35,6 +80,16 @@ const DE_SKILL_COPY: Record<string, { description?: string; examplePrompt?: stri
   'docs-page': {
     examplePrompt:
       'Eine Dokumentationsseite — linke Navigation, scrollbarer Artikelbereich, rechte Inhaltsübersicht.',
+  },
+  'open-design-landing': {
+    examplePrompt:
+      'Entwerfen Sie die Open-Design-Marketing-Landingpage im Atelier-Zero- / Monocle-Stil — warme Papierleinwand, surreale Plaster-und-Architektur-Collage, übergroße gemischte Italic-Serif-Display-Type, römische Ziffern als Sektionsmarker und ein einziger Korallenakzent.',
+  },
+  'open-design-landing-deck': {
+    examplePrompt:
+      'Erstellen Sie das Open-Design-Pitch-Deck im Atelier-Zero-Stil — Cover mit Hero-Plate, römische Sektions-Trenner, Stats-Slide (31 Skills · 72 Systeme · 12 CLIs), Kundenzitat, CTA und Mega-Italic-Serif-End-Card. Horizontal-Swipe-Pagination wie eine Print-Magazine.',
+    description:
+      'Erstellt ein Single-File-Slide-Deck im Atelier-Zero-Stil (warmes Papier, italic-serif Akzent-Spans, korallenfarbene Schluss-Dots, surreale Collage-Platten). Horizontale Magazin-Pagination mit Pfeiltasten- und Leertaste-Navigation, Live-HUD mit Slide-Zähler und Fortschrittsbalken; teilt sich Stylesheet und 16-Slot-Bildbibliothek mit der Schwester-Skill `open-design-landing`.',
   },
   'email-marketing': {
     examplePrompt:
@@ -56,10 +111,32 @@ const DE_SKILL_COPY: Record<string, { description?: string; examplePrompt?: stri
     examplePrompt:
       'Erstellen Sie mir ein Magazin-PPT über ‚Ein-Personen-Unternehmen · von AI gefaltete Organisationen‘, 25-minütiger Vortrag, Zielgruppe Designer + Gründer. Empfehlen Sie zuerst eine Richtung (Monocle / WIRED / Kinfolk / Domus / Lab), damit ich wählen kann.',
   },
+  'hatch-pet': {
+    examplePrompt:
+      'Brüten Sie mir ein winziges Pixel-Pet aus — ein freundlicher Shiba in einem kuscheligen Pulli. Nutzen Sie die hatch-pet-Skill durchgehend.',
+    description:
+      'Erstellt, repariert, validiert und packt ein Codex-kompatibles animiertes Pet-Spritesheet (8x9 Atlas, 192x208 Zellen) inklusive QA-Kontaktbogen, Vorschauvideos und pet.json.',
+  },
   'hr-onboarding': {
     examplePrompt:
       'Erstellen Sie einen 30-Tage-Onboardingplan für einen neuen Product Designer in einem 40-Personen-Startup.',
   },
+  'html-ppt': {},
+  'html-ppt-course-module': {},
+  'html-ppt-dir-key-nav-minimal': {},
+  'html-ppt-graphify-dark-graph': {},
+  'html-ppt-hermes-cyber-terminal': {},
+  'html-ppt-knowledge-arch-blueprint': {},
+  'html-ppt-obsidian-claude-gradient': {},
+  'html-ppt-pitch-deck': {},
+  'html-ppt-presenter-mode': {},
+  'html-ppt-product-launch': {},
+  'html-ppt-tech-sharing': {},
+  'html-ppt-testing-safety-alert': {},
+  'html-ppt-weekly-report': {},
+  'html-ppt-xhs-pastel-card': {},
+  'html-ppt-xhs-post': {},
+  'html-ppt-xhs-white-editorial': {},
   'hyperframes': {
     examplePrompt:
       'Ein 5-Sekunden-Product-Reveal: ein minimalistisches High-End-Produkt auf einer sauberen cremefarbenen Fläche, weiches Seitenlicht, langsamer Kamera-Push-in, zurückhaltende Bewegung, keine Text-Overlays.',
@@ -75,6 +152,18 @@ const DE_SKILL_COPY: Record<string, { description?: string; examplePrompt?: stri
   'invoice': {
     examplePrompt:
       'Erstellen Sie eine Rechnung eines freiberuflichen Designstudios an einen Kunden für ein Brand-Identity-Projekt — drei Positionen, 10% Retainer, 9% Umsatzsteuer.',
+  },
+  'kami-deck': {
+    examplePrompt:
+      'Erstellen Sie ein sechsteiliges Konferenz-Deck im kami-Stil (紙) — warmes Pergament, Tintenblau auf dem Cover, eine Serifenschnittstärke, horizontaler Magazin-Swipe.',
+    description:
+      'Erzeugt ein druckreifes Slide-Deck im kami-Designsystem: warmes Pergament (oder Tintenblau auf Cover/Kapitel), Serif nur in einer Schnittstärke, Tintenblau-Akzent ≤5% pro Folie, ohne Kursiv. Horizontale Magazin-Pagination (←/→ · Rad · Wischen · ESC-Übersicht). Eine eigenständige HTML-Datei, nur Google Fonts.',
+  },
+  'kami-landing': {
+    examplePrompt:
+      'Entwerfen Sie eine einseitige Studio-One-Pager im kami-Stil — Pergament-Leinwand, Tintenblau-Akzent, editorial wie ein Whitepaper.',
+    description:
+      'Erzeugt eine druckreife Einseiter im kami-Stil (紙): warmes Pergament, Tintenblau-Akzent, Serif in einer Schnittstärke, kein Kursiv, keine kühlen Grautöne. Liest sich wie Whitepaper oder Studio-One-Pager, nicht wie App-UI. Mehrsprachig (EN · zh-CN · ja). Eine eigenständige HTML-Datei ohne Abhängigkeiten.',
   },
   'kanban-board': {
     examplePrompt:
@@ -103,6 +192,10 @@ const DE_SKILL_COPY: Record<string, { description?: string; examplePrompt?: stri
   'pm-spec': {
     examplePrompt:
       'Schreiben Sie mir eine PRD für Two-Factor Auth in unserer SaaS-App — Problem, Scope, Meilensteine, offene Fragen.',
+  },
+  'pptx-html-fidelity-audit': {
+    examplePrompt:
+      'Vergleichen Sie deck.pptx mit deck.html, listen Sie Layout-Drift auf (Fußzeilen-Überlauf, fehlendes Italic, Hero nicht zentriert) und exportieren Sie mit Footer-Rail + Cursor-Flow neu.',
   },
   'pricing-page': {
     examplePrompt:
@@ -160,6 +253,8 @@ const DE_DESIGN_SYSTEM_SUMMARIES: Record<string, string> = {
   airbnb: 'Reisemarktplatz. Warmer Korallenakzent, fotogetrieben, abgerundete UI.',
   airtable: 'Spreadsheet-Datenbank-Hybrid. Farbenfroh, freundlich, strukturierte Datenästhetik.',
   apple: 'Unterhaltungselektronik. Premium-Weißraum, SF Pro, filmische Bildsprache.',
+  'atelier-zero':
+    'Editoriales Studio-System. Warme Papierleinwand, surreale Plaster-und-Architektur-Collage, gemischte Italic-Serif-Display-Type, römische Ziffern als Sektionsmarker und ein einziger Korallenakzent — gemacht für Magazin-Landingpages, Studio-Sites und Manifestseiten.',
   binance: 'Krypto-Börse. Kräftiger gelber Akzent auf Monochrom, Trading-Floor-Dringlichkeit.',
   bmw: 'Luxusautomobil. Dunkle Premium-Flächen, präzise deutsche Engineering-Ästhetik.',
   bugatti: 'Hypercar-Marke. Kinodunkle Leinwand, monochrome Strenge, monumentale Display-Type.',
@@ -181,6 +276,8 @@ const DE_DESIGN_SYSTEM_SUMMARIES: Record<string, string> = {
   hashicorp: 'Infrastrukturautomatisierung. Sauberer Enterprise-Look, Schwarz und Weiß.',
   ibm: 'Enterprise-Technologie. Carbon Design System, strukturierte blaue Palette.',
   intercom: 'Customer Messaging. Freundliche blaue Palette, konversationelle UI-Muster.',
+  kami:
+    'Editoriales Papiersystem. Warme Pergament-Leinwand, tintenblauer Akzent, Serif in nur einem Schnitt — gemacht für Lebensläufe, One-Pager, White-Paper, Portfolios und Slide-Decks.',
   kraken: 'Krypto-Trading. Dunkle UI mit violettem Akzent, datenreiche Dashboards.',
   lamborghini: 'Supercar-Marke. Echtschwarze Flächen, Goldakzente, dramatische Großbuchstaben-Typografie.',
   'linear-app': 'Projektmanagement. Ultraminimal, präzise, violetter Akzent.',
@@ -239,21 +336,107 @@ const DE_DESIGN_SYSTEM_SUMMARIES: Record<string, string> = {
 const DE_DESIGN_SYSTEM_CATEGORIES: Record<string, string> = {
   Starter: 'Starter',
   'AI & LLM': 'AI & LLM',
+  'Bold & Expressive': 'Mutig & Ausdrucksstark',
+  'Creative & Artistic': 'Kreativ & Künstlerisch',
   'Developer Tools': 'Entwickler-Tools',
+  'Layout & Structure': 'Layout & Struktur',
+  'Modern & Minimal': 'Modern & Minimal',
+  'Morphism & Effects': 'Morphism & Effekte',
   'Productivity & SaaS': 'Produktivität & SaaS',
+  'Professional & Corporate': 'Professionell & Corporate',
   'Backend & Data': 'Backend & Daten',
   'Design & Creative': 'Design & Kreativität',
   'Fintech & Crypto': 'Fintech & Krypto',
   'E-Commerce & Retail': 'E-Commerce & Handel',
   'Media & Consumer': 'Medien & Consumer',
   Automotive: 'Automotive',
+  'Editorial & Print': 'Editorial & Print',
+  'Editorial · Studio': 'Editorial · Studio',
+  'Retro & Nostalgic': 'Retro & Nostalgisch',
+  'Themed & Unique': 'Thematisch & Einzigartig',
   Uncategorized: 'Nicht kategorisiert',
 };
+
+const DE_SKILL_IDS_WITH_EN_FALLBACK = [
+  'html-ppt-taste-brutalist',
+  'html-ppt-taste-editorial',
+  'web-prototype-taste-brutalist',
+  'web-prototype-taste-editorial',
+  'web-prototype-taste-soft',
+] as const;
+
+const DE_DESIGN_SYSTEM_IDS_WITH_EN_FALLBACK = [
+  'agentic',
+  'ant',
+  'application',
+  'arc',
+  'artistic',
+  'bento',
+  'bold',
+  'brutalism',
+  'cafe',
+  'canva',
+  'claymorphism',
+  'clean',
+  'colorful',
+  'contemporary',
+  'corporate',
+  'cosmic',
+  'creative',
+  'dashboard',
+  'discord',
+  'dithered',
+  'doodle',
+  'dramatic',
+  'duolingo',
+  'editorial',
+  'elegant',
+  'energetic',
+  'enterprise',
+  'expressive',
+  'fantasy',
+  'flat',
+  'friendly',
+  'futuristic',
+  'github',
+  'glassmorphism',
+  'gradient',
+  'huggingface',
+  'levels',
+  'lingo',
+  'luxury',
+  'material',
+  'minimal',
+  'modern',
+  'mono',
+  'neobrutalism',
+  'neon',
+  'neumorphism',
+  'openai',
+  'pacman',
+  'paper',
+  'perspective',
+  'premium',
+  'professional',
+  'publication',
+  'refined',
+  'retro',
+  'shadcn',
+  'simple',
+  'skeumorphism',
+  'sleek',
+  'spacious',
+  'storytelling',
+  'tetris',
+  'vibrant',
+  'vintage',
+] as const;
 
 const DE_PROMPT_TEMPLATE_CATEGORIES: Record<string, string> = {
   Infographic: 'Infografik',
   'Anime / Manga': 'Anime / Manga',
   'App / Web Design': 'App- / Webdesign',
+  'Game UI': 'Spiel-UI',
   Illustration: 'Illustration',
   'Profile / Avatar': 'Profil / Avatar',
   'Social Media Post': 'Social-Media-Post',
@@ -264,24 +447,117 @@ const DE_PROMPT_TEMPLATE_CATEGORIES: Record<string, string> = {
   'VFX / Fantasy': 'VFX / Fantasy',
   Anime: 'Anime',
   'Social / Meme': 'Social / Meme',
+  Branding: 'Branding',
+  Data: 'Daten',
+  Marketing: 'Marketing',
+  Product: 'Produkt',
+  'Short Form': 'Short Form',
+  Travel: 'Reise',
 };
+
+const DE_PROMPT_TEMPLATE_IDS_WITH_EN_FALLBACK = [] as const;
 
 const DE_PROMPT_TEMPLATE_TAGS: Record<string, string> = {
+  '3d': '3D',
   '3d-render': '3D-Render',
   action: 'Action',
+  'ancient-china': 'Altes China',
   anime: 'Anime',
+  'app-showcase': 'App-Showcase',
+  archery: 'Archery',
+  arpg: 'ARPG',
+  'audio-reactive': 'Audio-reaktiv',
+  'boss-fight': 'Boss Fight',
+  brand: 'Brand',
+  branding: 'Branding',
+  captions: 'Untertitel',
+  cavalry: 'Cavalry',
+  chart: 'Chart',
+  childlike: 'Kindlich',
+  choreography: 'Choreografie',
   cinematic: 'Filmisch',
   'cinematic-romance': 'Filmische Romanze',
+  combat: 'Kampf',
+  combo: 'Combo',
+  'companion-to-image': 'Companion to Image',
+  counter: 'Counter',
+  crayon: 'Wachsmalstift',
   cyberpunk: 'Cyberpunk',
+  dance: 'Tanz',
+  'data-viz': 'Data-Viz',
+  editorial: 'Editorial',
+  'elden-ring': 'Elden Ring',
+  endcard: 'End Card',
+  escort: 'Escort',
+  'escort-mission': 'Escort Mission',
   fantasy: 'Fantasy',
+  fashion: 'Mode',
+  'fighting-game': 'Fighting Game',
   food: 'Food',
+  'game-cinematic': 'Game Cinematic',
+  'game-ui': 'Spiel-UI',
+  'grid-sheet': 'Grid Sheet',
+  guanyu: 'Guanyu',
+  'hand-drawn': 'Handgezeichnet',
+  hud: 'HUD',
+  'hud-safe': 'HUD-safe',
+  hype: 'Hype',
+  hyperframes: 'HyperFrames',
+  idol: 'Idol',
+  illustration: 'Illustration',
+  'image-to-image': 'Bild-zu-Bild',
+  infographic: 'Infografik',
+  japanese: 'Japanisch',
+  karaoke: 'Karaoke',
+  'key-visual': 'Key Visual',
+  'kinetic-typography': 'Kinetische Typografie',
+  'linear-style': 'Linear-Stil',
+  logo: 'Logo',
+  lyubu: 'Lyu Bu',
+  map: 'Karte',
+  marketing: 'Marketing',
+  minimal: 'Minimal',
+  mmo: 'MMO',
+  mobile: 'Mobile',
+  money: 'Geld',
+  'mounted-combat': 'Mounted Combat',
   nature: 'Natur',
+  'open-world': 'Open World',
+  'otaku-dance': 'Otaku Dance',
+  outro: 'Outro',
+  overlay: 'Overlay',
+  pipeline: 'Pipeline',
+  'pose-reference': 'Pose Reference',
   portrait: 'Porträt',
   product: 'Produkt',
+  'product-promo': 'Produkt-Promo',
+  rework: 'Überarbeiten',
+  route: 'Route',
+  saas: 'SaaS',
+  sequence: 'Sequenz',
+  sizzle: 'Sizzle',
+  social: 'Social',
+  storyboard: 'Storyboard',
+  'street-fighter': 'Street Fighter',
+  'style-transfer': 'Stiltransfer',
+  tekken: 'Tekken',
+  'three-kingdoms': 'Three Kingdoms',
+  tiktok: 'TikTok',
+  'title-card': 'Title Card',
+  transform: 'Transformieren',
+  travel: 'Reise',
+  tts: 'TTS',
   typography: 'Typografie',
+  'unreal-engine-5': 'Unreal Engine 5',
+  vertical: 'Vertikal',
+  'video-reference': 'Video Reference',
+  'vs-screen': 'VS Screen',
+  'website-to-video': 'Website-zu-Video',
+  wuxia: 'Wuxia',
+  zhaoyun: 'Zhaoyun',
 };
 
-const DE_PROMPT_TEMPLATE_COPY: Record<string, Partial<Pick<PromptTemplateSummary, 'summary' | 'title'>>> = {
+const DE_PROMPT_TEMPLATE_COPY: Record<string, LocalizedPromptTemplateCopy> = {
   '3d-stone-staircase-evolution-infographic': {
     title: '3D-Infografik einer Steintreppen-Evolution',
     summary:
@@ -302,6 +578,7 @@ const DE_PROMPT_TEMPLATE_COPY: Record<string, Partial<Pick<PromptTemplateSummary
     summary:
       'Erzeugt eine handgezeichnete Tourist Map im Aquarellstil mit nummerierten lokalen Spezialitäten, Sehenswürdigkeiten und Legende.',
   },
+  'infographic-otaku-dance-choreography-breakdown-gokurakujodo-16-panels': {},
   'momotaro-explainer-slide-in-hybrid-style': {
     title: 'Momotaro-Erklärslide im Hybrid-Stil',
     summary:
@@ -557,10 +834,69 @@ const DE_PROMPT_TEMPLATE_COPY: Record<string, Partial<Pick<PromptTemplateSummary
     summary:
       'Komplexer Dark-Comedy-Prompt für Seedance 2.0 mit einem orangefarbenen Katzenbeamten und einem Hyänenkaiser in einer satirischen Qing-Dynastie-Szene.',
   },
+  'game-screenshot-anime-fighting-game-captain-ryuuga-vs-kaze-renshin': {},
+  'game-screenshot-three-kingdoms-guanyu-slaying-yanliang': {},
+  'game-screenshot-three-kingdoms-lyubu-yuanmen-archery': {},
+  'game-screenshot-three-kingdoms-zhaoyun-cradle-escape': {},
   'hollywood-haute-couture-fantasy-video-prompt': {
     title: 'Hollywood-Haute-Couture-Fantasy-Video-Prompt',
     summary:
       'Detaillierter Multi-Scene-Video-Prompt für Seedance 2.0, ausgelegt auf einen Hollywood-Haute-Couture-Fantasy-Film mit 8K/Unreal-Engine-Ästhetik.',
+  },
+  'hyperframes-app-showcase-three-phones': {
+    title: 'HyperFrames: 12-Sekunden-App-Showcase – drei schwebende Phones',
+    summary:
+      'Eine 12-sekündige 16:9-App-Showcase-Komposition – drei schwebende iPhone-Screens schweben im 3D-Raum, jedes rotiert nacheinander, um ein anderes Feature zu zeigen, beat-synchrone Label-Callouts, End-Logo-Lockup. Direkt auf dem HyperFrames-`app-showcase`-Catalog-Block aufgebaut.',
+  },
+  'hyperframes-brand-sizzle-reel': {
+    title: 'HyperFrames: 30-Sekunden-Brand-Sizzle-Reel',
+    summary:
+      'Ein 30-sekündiges 16:9-HyperFrames-Sizzle-Reel – schnelle Schnitte, beat-synchrone kinetische Typografie, audio-reaktive Skalierung auf Display-Wörtern, Shader-Übergänge zwischen fünf Szenen, End-Card mit Logo-Bloom. Modelliert nach dem aisoc-hype-Archetyp aus dem Student-Kit.',
+  },
+  'hyperframes-data-bar-chart-race': {
+    title: 'HyperFrames: Animiertes Bar-Chart-Race (NYT-Stil)',
+    summary:
+      'Eine 12-sekündige 16:9-Daten-Infografik – animiertes Balken- und Liniendiagramm mit gestaffeltem Kategorie-Reveal, NYT-artiger Serif-Headline, Quellen-Footnote, kinetische Wert-Labels. Direkt auf dem HyperFrames-`data-chart`-Catalog-Block aufgebaut.',
+  },
+  'hyperframes-flight-map-route': {
+    title: 'HyperFrames: Apple-Style-Flugkarte (Origin → Destination)',
+    summary:
+      'Eine 8-sekündige filmische 16:9-Flugrouten-Karte – realistischer Terrain-Zoom, animiertes Flugzeug, das auf einer geschwungenen Route von Start- zu Zielort gleitet, beschriftete Städte, kinetischer Distanzzähler. Direkt auf dem HyperFrames-`nyc-paris-flight`-Catalog-Block aufgebaut, für jedes Städtepaar wiederverwendbar.',
+  },
+  'hyperframes-logo-outro-cinematic': {
+    title: 'HyperFrames: 4-Sekunden filmisches Logo-Outro',
+    summary:
+      'Ein 4-sekündiges 16:9-Logo-Outro – stückweise Wordmark-Aufbau mit Bloom, Shimmer-Sweep über das finale Lockup, weiches Grain-Overlay, einzeilige CTA. Aufgebaut auf den HyperFrames-Blöcken `logo-outro`, `shimmer-sweep` und `grain-overlay`.',
+  },
+  'hyperframes-money-counter-hype': {
+    title: 'HyperFrames: $0 → $10K Money-Counter-Hype (9:16)',
+    summary:
+      'Ein 6-sekündiger vertikaler 1080×1920-HyperFrames-Hype-Clip – Apple-artiger $0 → $10.000-Counter mit grünem Flash, Money-Burst-Partikeln, Cash-Stack-Icon, Kicker-Headline. Aufgebaut auf dem HyperFrames-`apple-money-count`-Catalog-Block.',
+  },
+  'hyperframes-product-reveal-minimal': {
+    title: 'HyperFrames: 5-Sekunden minimaler Product Reveal',
+    summary:
+      'Eine 5-sekündige HyperFrames-Komposition für einen High-End-Product-Reveal – dunkle Leinwand, einzelner warmer Akzent, langsamer Push-in-Title-Card, kinetische Kicker-Zeile, zurückhaltende Bewegung. Der Agent rendert MP4 aus HTML+GSAP via Puppeteer; kein Stock Footage nötig.',
+  },
+  'hyperframes-saas-product-promo-30s': {
+    title: 'HyperFrames: 30-Sekunden-SaaS-Product-Promo (Linear-Stil)',
+    summary:
+      'Eine 30-sekündige HyperFrames-Komposition modelliert nach Linear/ClickUp-artigen Produktfilmen – UI-3D-Reveals, beat-synchrone kinetische Typografie, animierte UI-Screenshots, End-Card mit Logo-Outro. Aus HF-Catalog-Blöcken (ui-3d-reveal, app-showcase, logo-outro) plus Shader-Übergängen zwischen Szenen aufgebaut.',
+  },
+  'hyperframes-social-overlay-stack': {
+    title: 'HyperFrames: 9:16 Social-Overlay-Stack (X · Reddit · Spotify · Instagram)',
+    summary:
+      'Eine 15-sekündige vertikale 1080×1920-HyperFrames-Komposition, die vier animierte Social-Cards über einen Face-Cam-Loop stapelt – einen X-Post, eine Reddit-Reaktion, eine Spotify-Now-Playing-Card und am Ende eine Instagram-Follow-CTA. Jede Karte ist ein HyperFrames-Catalog-Block; die Choreografie ist das Value-Add.',
+  },
+  'hyperframes-tiktok-karaoke-talking-head': {
+    title: 'HyperFrames: 9:16 TikTok-Talking-Head mit Karaoke-Untertiteln',
+    summary:
+      'Ein vertikaler 1080×1920-HyperFrames-Short – TTS-narrierter Talking-Head über einem Face-Cam-Loop, mit karaoke-artigen wort-synchronen Untertiteln, animiertem Lower Third und einem TikTok-Follow-Overlay am Ende. Spiegelt den may-shorts-19-Archetyp aus dem HyperFrames-Student-Kit.',
+  },
+  'hyperframes-website-to-video-promo': {
+    title: 'HyperFrames: Website-zu-Video-Pipeline (15-Sekunden-Marketing-Cut)',
+    summary:
+      'Eine 15-sekündige 16:9-HyperFrames-Komposition, die eine Live-Website in drei Viewport-Größen erfasst und dann mit einem chromatischen Radial-Split zwischen Szenen animiert. Spiegelt den hyperframes-sizzle-Student-Kit-Archetyp wider, bei dem die Site das Quell-Asset ist.',
   },
   'hunched-character-animation': {
     title: 'Animation einer gebeugten Figur',
@@ -627,6 +963,9 @@ const DE_PROMPT_TEMPLATE_COPY: Record<string, Partial<Pick<PromptTemplateSummary
     summary:
       'Umfassender Seedance-2.0-Video-Prompt für einen anmutigen traditionellen Tanz auf Basis von Choreografie- und Identitätsreferenzbildern.',
   },
+  'video-seedance-three-kingdoms-guanyu-slaying-yanliang': {},
+  'video-seedance-three-kingdoms-lyubu-yuanmen-archery': {},
+  'video-seedance-three-kingdoms-zhaoyun-cradle-escape': {},
   'vintage-disney-style-pirate-crocodile-animation': {
     title: 'Piraten-Krokodil-Animation im Vintage-Disney-Stil',
     summary:
@@ -642,19 +981,91 @@ const DE_PROMPT_TEMPLATE_COPY: Record<string, Partial<Pick<PromptTemplateSummary
     summary:
       'Filmischer Prompt für eine High-Speed-Wüsten-Wasteland-Szene mit einer laufenden Industriefabrik auf Beinen und einer Verfolgung per Rebel Bike.',
   },
+  'game-ui-ancient-china-open-world-mmo-hud': {
+    title: 'Spiel-UI - Altes China, Open-World-MMO-HUD',
+    summary:
+      'Erzeugt ein In-Game-HUD-Screenshot-Mockup für ein AAA-Open-World-MMO im alten China im filmischen photorealistischen Stil von Black Myth: Wukong, zentriert auf eine Schwertkämpferin in einer nebligen Bergszene mit vollständigem MMO-HUD (Charakterpanel, Minimap, Skill-Hotbar, Quest-Tracker, Chat).',
+  },
+  'illustration-crayon-kid-drawing-rework': {
+    title: 'Illustration - Wachsmalstift-Kinderzeichnung-Überarbeitung',
+    summary:
+      'Ein Stiltransfer-Prompt, der jedes Referenzbild in eine handgezeichnete Wachsmalstift-Illustration verwandelt, die wirkt, als hätte sie ein 10-jähriges Kind gemalt. Ersetzt die Originalfarbpalette durch helle, verspielte Wachsmalstifttöne auf sauberem weißem Papier, mit kindlicher Deko wie Schlössern, Süßigkeiten, Sternen und Regenbögen. Funktioniert als Bild-zu-Bild-Edit in GPT-image-2.',
+  },
+  'social-media-post-sensational-girl-dance-storyboard-8-shots': {
+    title: 'Social-Media-Post - Tanz-Storyboard eines Stylish Girls (8 Shots)',
+    summary:
+      'Ein vollständiges 8-Shot-Storyboard-Prompt-Set für die Erzeugung einer kohärenten Bild-für-Bild-Tanzsequenz einer stylischen Figur. Enthält gemeinsame globale Style-Token, einen wiederverwendbaren Negativ-Prompt und acht Einzelshots (Eröffnungspose → Hüftgroove → Body Wave → Beat-Drop-Hüftdreher → seitliche Hüftschwingung → Haarwurf → Power-Stance → Abschlusspose).',
+  },
 };
 
-export const GERMAN_CONTENT_IDS = {
-  skills: Object.keys(DE_SKILL_COPY),
-  designSystems: Object.keys(DE_DESIGN_SYSTEM_SUMMARIES),
-  designSystemCategories: Object.keys(DE_DESIGN_SYSTEM_CATEGORIES),
-  promptTemplates: Object.keys(DE_PROMPT_TEMPLATE_COPY),
-  promptTemplateCategories: Object.keys(DE_PROMPT_TEMPLATE_CATEGORIES),
-  promptTemplateTags: Object.keys(DE_PROMPT_TEMPLATE_TAGS),
+const LOCALIZED_CONTENT: Partial<Record<Locale, LocalizedContentBundle>> = {
+  de: {
+    skillCopy: DE_SKILL_COPY,
+    skillIdsWithEnFallback: DE_SKILL_IDS_WITH_EN_FALLBACK,
+    designSystemSummaries: DE_DESIGN_SYSTEM_SUMMARIES,
+    designSystemCategories: DE_DESIGN_SYSTEM_CATEGORIES,
+    designSystemIdsWithEnFallback: DE_DESIGN_SYSTEM_IDS_WITH_EN_FALLBACK,
+    promptTemplateCategories: DE_PROMPT_TEMPLATE_CATEGORIES,
+    promptTemplateIdsWithEnFallback: DE_PROMPT_TEMPLATE_IDS_WITH_EN_FALLBACK,
+    promptTemplateTags: DE_PROMPT_TEMPLATE_TAGS,
+    promptTemplateCopy: DE_PROMPT_TEMPLATE_COPY,
+  },
+  ru: {
+    skillCopy: RU_SKILL_COPY,
+    skillIdsWithEnFallback: RU_SKILL_IDS_WITH_EN_FALLBACK,
+    designSystemSummaries: RU_DESIGN_SYSTEM_SUMMARIES,
+    designSystemCategories: RU_DESIGN_SYSTEM_CATEGORIES,
+    designSystemIdsWithEnFallback: RU_DESIGN_SYSTEM_IDS_WITH_EN_FALLBACK,
+    promptTemplateCategories: RU_PROMPT_TEMPLATE_CATEGORIES,
+    promptTemplateIdsWithEnFallback: RU_PROMPT_TEMPLATE_IDS_WITH_EN_FALLBACK,
+    promptTemplateTags: RU_PROMPT_TEMPLATE_TAGS,
+    promptTemplateCopy: RU_PROMPT_TEMPLATE_COPY,
+  },
+  fr: {
+    skillCopy: FR_SKILL_COPY,
+    skillIdsWithEnFallback: FR_SKILL_IDS_WITH_EN_FALLBACK,
+    designSystemSummaries: FR_DESIGN_SYSTEM_SUMMARIES,
+    designSystemCategories: FR_DESIGN_SYSTEM_CATEGORIES,
+    designSystemIdsWithEnFallback: FR_DESIGN_SYSTEM_IDS_WITH_EN_FALLBACK,
+    promptTemplateCategories: FR_PROMPT_TEMPLATE_CATEGORIES,
+    promptTemplateIdsWithEnFallback: FR_PROMPT_TEMPLATE_IDS_WITH_EN_FALLBACK,
+    promptTemplateTags: FR_PROMPT_TEMPLATE_TAGS,
+    promptTemplateCopy: FR_PROMPT_TEMPLATE_COPY,
+  },
 };
 
-function isGerman(locale: Locale): boolean {
-  return locale === 'de';
+function buildLocalizedContentIds(content: LocalizedContentBundle): LocalizedContentIds {
+  return {
+    skills: [
+      ...Object.keys(content.skillCopy),
+      ...content.skillIdsWithEnFallback,
+    ],
+    designSystems: [
+      ...Object.keys(content.designSystemSummaries),
+      ...content.designSystemIdsWithEnFallback,
+    ],
+    designSystemCategories: Object.keys(content.designSystemCategories),
+    promptTemplates: [
+      ...Object.keys(content.promptTemplateCopy),
+      ...content.promptTemplateIdsWithEnFallback,
+    ],
+    promptTemplateCategories: Object.keys(content.promptTemplateCategories),
+    promptTemplateTags: Object.keys(content.promptTemplateTags),
+  };
+}
+
+export const LOCALIZED_CONTENT_IDS = {
+  de: buildLocalizedContentIds(LOCALIZED_CONTENT.de!),
+  ru: buildLocalizedContentIds(LOCALIZED_CONTENT.ru!),
+  fr: buildLocalizedContentIds(LOCALIZED_CONTENT.fr!),
+} satisfies Record<'de' | 'ru' | 'fr', LocalizedContentIds>;
+
+export const GERMAN_CONTENT_IDS = LOCALIZED_CONTENT_IDS.de;
+export const RUSSIAN_CONTENT_IDS = LOCALIZED_CONTENT_IDS.ru;
+export const FRENCH_CONTENT_IDS = LOCALIZED_CONTENT_IDS.fr;
+
+function getLocalizedContent(locale: Locale): LocalizedContentBundle | undefined {
+  return LOCALIZED_CONTENT[locale];
 }
 
 function normalizeText(text: string): string {
@@ -662,18 +1073,14 @@ function normalizeText(text: string): string {
 }
 
 export function localizeSkillPrompt(locale: Locale, skill: SkillSummary): string | undefined {
-  if (isGerman(locale)) {
-    const translated = DE_SKILL_COPY[skill.id]?.examplePrompt;
-    if (translated) return translated;
-  }
+  const translated = getLocalizedContent(locale)?.skillCopy[skill.id]?.examplePrompt;
+  if (translated) return translated;
   return skill.examplePrompt ? normalizeText(skill.examplePrompt) : undefined;
 }
 
 export function localizeSkillDescription(locale: Locale, skill: SkillSummary): string {
-  if (isGerman(locale)) {
-    const translated = DE_SKILL_COPY[skill.id]?.description;
-    if (translated) return translated;
-  }
+  const translated = getLocalizedContent(locale)?.skillCopy[skill.id]?.description;
+  if (translated) return translated;
   return normalizeText(skill.description);
 }
 
@@ -681,30 +1088,27 @@ export function localizeDesignSystemSummary(
   locale: Locale,
   system: DesignSystemSummary,
 ): string {
-  if (isGerman(locale)) {
-    const translated = DE_DESIGN_SYSTEM_SUMMARIES[system.id];
-    if (translated) return translated;
-  }
+  const translated = getLocalizedContent(locale)?.designSystemSummaries[system.id];
+  if (translated) return translated;
   return system.summary || system.category || '';
 }
 
 export function localizeDesignSystemCategory(locale: Locale, category: string): string {
-  if (!isGerman(locale)) return category;
-  return DE_DESIGN_SYSTEM_CATEGORIES[category] ?? category;
+  return getLocalizedContent(locale)?.designSystemCategories[category] ?? category;
 }
 
 export function localizePromptTemplateCategory(locale: Locale, category: string): string {
-  if (!isGerman(locale)) return category;
-  return DE_PROMPT_TEMPLATE_CATEGORIES[category] ?? category;
+  return getLocalizedContent(locale)?.promptTemplateCategories[category] ?? category;
 }
 
 export function localizePromptTemplateSummary(
   locale: Locale,
   template: PromptTemplateSummary,
 ): PromptTemplateSummary {
-  if (!isGerman(locale)) return template;
-  const translated = DE_PROMPT_TEMPLATE_COPY[template.id];
-  const tags = template.tags?.map((tag) => DE_PROMPT_TEMPLATE_TAGS[tag] ?? tag);
+  const content = getLocalizedContent(locale);
+  if (!content) return template;
+  const translated = content.promptTemplateCopy[template.id];
+  const tags = template.tags?.map((tag) => content.promptTemplateTags[tag] ?? tag);
   return {
     ...template,
     title: translated?.title ?? template.title,
